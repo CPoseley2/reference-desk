@@ -1,0 +1,45 @@
+.library-home-main{max-width:1160px;margin:0 auto;padding:56px 32px}.library-home-heading{display:flex;align-items:center;justify-content:space-between;gap:28px;margin-bottom:32px}.library-home-heading h1{font-size:40px;margin:4px 0 12px}.library-home-heading p{max-width:620px;color:#6e7466;line-height:1.6}.library-eyebrow{font-size:12px;font-weight:700;letter-spacing:.18em}.library-primary{background:#284e40;color:#fff;border:1px solid #284e40;padding:12px 18px;border-radius:7px;font-weight:600;white-space:nowrap}.library-primary:hover{background:#1c3c30}.library-local{color:#eee6d0;margin-left:auto;font-size:13px}.library-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px}.library-card{padding:25px;background:#faf8f0;border:1px solid #d4d5c5;border-radius:10px;box-shadow:0 3px 10px #263e3209}.library-card-top{display:flex;align-items:center;justify-content:space-between;min-height:40px}.library-card-icon{font-size:32px;color:#355344}.library-recent{font-size:12px;background:#e5eadc;border-radius:20px;padding:5px 10px}.library-card h2{font-size:24px;margin:18px 0;overflow-wrap:anywhere}.library-card dl{display:flex;gap:30px;margin:22px 0 26px}.library-card dl>div{display:flex;flex-direction:column-reverse;gap:4px}.library-card dt{font-size:12px;color:#6b7567}.library-card dd{margin:0;font-size:24px}.library-open{display:flex;justify-content:space-between;padding-top:16px;border-top:1px solid #d9ddce;font-weight:600;text-decoration:none;color:#284e40}.library-open:hover{text-decoration:underline}
+#libraryDialog{width:min(520px,calc(100vw - 40px));padding:26px;background:#f7f5ec;border:1px solid #bcc8b4;border-radius:10px;color:#263e32}#libraryDialog::backdrop{background:#14291fd4}.library-dialog-heading{display:flex;align-items:center;justify-content:space-between;gap:15px}.library-dialog-heading h2{margin:0;font-size:25px}.library-dialog-heading button{font-size:24px;padding:1px 10px;background:transparent;border:0}#libraryDialog p{font-size:14px;line-height:1.6;color:#687261}#libraryDialog label{display:grid;gap:8px;font-weight:600}#libraryDialog input{width:100%;box-sizing:border-box;padding:12px;font-size:16px}.library-dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.library-form-status:empty{display:none}#libraryStatus:empty{display:none}
+@media(max-width:760px){.library-home-main{padding:28px 18px}.library-home-heading{align-items:flex-start;flex-direction:column}.library-home-heading h1{font-size:32px}.library-local{display:none}}
+
+/* One compact header row. Explicit sizing overrides the older fixed-height header. */
+body>header.desk-header{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto;align-items:center;gap:12px;height:auto;min-height:88px;padding:12px 24px;overflow:visible}
+.desk-header>.brand{grid-column:1;grid-row:1;min-width:0;width:fit-content;max-width:100%;margin:0;overflow:hidden}
+.desk-header .brand-canvas{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.desk-header .brand-canvas small{white-space:normal;overflow-wrap:anywhere;line-height:1.35;letter-spacing:normal}
+.desk-header>.generation-activity-dock{grid-column:2;grid-row:1;min-width:0;width:min(260px,28vw);margin:0}
+.desk-header>.library-switcher{grid-column:3;grid-row:1;position:static;display:block;width:44px;margin:0;min-width:44px}
+body>header.desk-header>.topactions{grid-column:4;grid-row:1;display:flex;align-items:center;justify-content:flex-end;flex-wrap:nowrap;gap:12px;position:static;width:auto;margin:0;min-width:66px;align-self:center}
+.desk-header>.topactions>.local-status-dot{flex:none}
+.library-menu{position:static;margin:0}
+.library-menu>summary{display:grid;place-items:center;list-style:none;width:44px;height:44px;padding:0;border:1px solid #a59b7a;border-radius:6px;background:#203e33d9;color:#f6efdc;cursor:pointer}
+.library-menu>summary::-webkit-details-marker{display:none}
+.library-menu>summary:hover,.library-menu[open]>summary{background:#3b584b}
+.library-menu>summary:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.library-menu-panel{position:absolute;z-index:60;top:calc(100% + 8px);right:24px;width:min(350px,calc(100vw - 32px));max-height:calc(100dvh - 120px);overflow:auto;padding:16px;background:var(--panel);color:var(--ink);border:1px solid #bcc8bc;border-radius:9px;box-shadow:0 8px 26px #15291f40}
+.library-menu-caption{margin:0 0 4px;font-size:10px;font-weight:700;letter-spacing:.12em;color:var(--muted)}
+.library-menu-current{margin:0 0 12px;font-size:19px;font-weight:650;line-height:1.3;overflow-wrap:anywhere}
+.library-linked-note{font-size:12px;line-height:1.5;color:#536650;margin:0 0 12px}
+.library-menu-list{display:grid;gap:3px;padding:10px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.library-menu-panel a,.library-menu-panel button{display:flex;align-items:center;gap:10px;justify-content:space-between;min-height:44px;width:100%;padding:10px;border:0;border-radius:5px;text-align:left;background:transparent;color:var(--green);font-size:14px;line-height:1.4;text-decoration:none;overflow-wrap:anywhere}
+.library-menu-panel a:hover,.library-menu-panel button:hover{background:#e5ebdf}
+.library-menu-list a[aria-current=page]{background:#e5ebdf;font-weight:650}
+.library-menu-check{flex:none;color:var(--green)}
+.library-menu-actions{display:grid;gap:3px;padding-top:8px}
+.library-menu-actions button{justify-content:flex-start}
+.library-switch-status:empty{display:none}
+.library-switch-status{margin:10px 0 0;font-size:13px;line-height:1.5;color:#8b3927}
+@media(max-width:700px){
+ body>header.desk-header{grid-template-columns:minmax(0,1fr) auto auto;gap:10px;padding:10px 16px;min-height:76px}
+ .desk-header>.library-switcher{grid-column:2}
+ body>header.desk-header>.topactions{grid-column:3}
+ .desk-header>.generation-activity-dock{grid-column:1/-1;grid-row:2;width:100%;max-width:none}
+ .library-menu-panel{right:16px}
+}
+@media(max-width:440px){
+ body>header.desk-header{padding:8px 12px;gap:8px;min-height:70px}
+ .desk-header>.brand{gap:0}
+ body>header.desk-header .mark{display:none}
+ .desk-header .brand-canvas{display:block;font-size:14px;letter-spacing:1px}
+ .library-menu-panel{right:12px}
+}

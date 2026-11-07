@@ -1,0 +1,34 @@
+# Private runtime data — never part of the source distribution.
+.state/
+libraries/
+assets/
+thumbs/
+sources/
+prompts/
+catalog-history/
+generation-records/
+backups/
+reports/
+/manifest.json
+/data.js
+/looks.json
+/roster.*
+/reference-manifest.csv
+/reference-audit.csv
+/director-reference-manifest.json
+# Credentials and local tooling
+.env
+.env.*
+!.env.example
+*api-key*
+*.pem
+*.key
+__pycache__/
+*.py[cod]
+.DS_Store
+*.log
+.venv/
+*.app/
+*.zip
+!docs/assets/
+!docs/assets/**

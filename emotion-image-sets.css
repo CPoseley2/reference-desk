@@ -1,0 +1,15 @@
+.emotion-set-identity{display:flex;align-items:center;gap:18px;padding:14px;border:1px solid #c4d0be;border-radius:10px;background:#edf2e7}.emotion-set-identity img{width:90px;height:100px;object-fit:cover;object-position:top}
+.emotion-set-labels{display:flex;flex-wrap:wrap;list-style:none;gap:8px;padding:0;margin:20px 0}.emotion-set-labels li{padding:6px 10px;border-radius:6px;background:#e9e4d7;color:#4f5c46;font-size:13px}
+.emotion-set-setup>label{display:grid;gap:7px;margin:16px 0;font-weight:600}.emotion-set-setup select,.emotion-set-setup textarea{padding:10px;border:1px solid #bbc8b5;border-radius:6px;background:#fffdf7;font:inherit}.emotion-set-prompts pre{white-space:pre-wrap;font:13px/1.5 system-ui;background:#fffdf7;padding:14px;border:1px solid #d2d8ca;border-radius:6px}.emotion-set-prompts>summary{padding:12px 0;font-weight:600}
+.emotion-set-progress-heading{display:flex;justify-content:space-between;gap:14px;font-size:18px}.emotion-set-progress-heading>span{text-transform:capitalize;color:#69765e;font-size:14px}.emotion-set-items{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin:20px 0}.emotion-set-items article{display:flex;align-items:center;gap:14px;padding:12px;background:#fffdf6;border:1px solid #cdd6c6;border-radius:8px}.emotion-set-items img,.emotion-set-placeholder{width:72px;height:72px;object-fit:cover;flex:none}.emotion-set-placeholder{display:grid;place-items:center;background:#eeeadd;color:#8a937c;border-radius:5px;font-size:26px}.emotion-set-items p{margin:6px 0}.emotion-set-controls{display:flex;gap:8px;flex-wrap:wrap}.emotion-slot>.small button{font-size:12px;padding:3px 6px}
+
+.emotion-set-label-group{margin:20px 0}.emotion-set-label-group h3{font:600 14px/1.4 system-ui;margin:0 0 9px}.emotion-set-label-group h3 span{font-weight:400}.emotion-set-label-group .emotion-set-labels{margin:0}.emotion-set-label-group li{border:1px solid transparent}.emotion-set-label-group.is-mapped h3{color:#235138}.emotion-set-label-group.is-mapped li{color:#235138;background:#d8ead3;border-color:#91b58f}.emotion-set-label-group.is-missing h3{color:#85470d}.emotion-set-label-group.is-missing li{color:#85470d;background:#f8e2c4;border-color:#d8984e}
+
+/* Static disclosures stay open while the progress cards refresh. */
+.emotion-set-help{display:flex;align-items:flex-start;gap:8px;margin-top:14px}
+.emotion-set-help details{position:relative;margin:0}
+.emotion-set-help summary{display:grid;place-items:center;list-style:none;width:38px;height:38px;border:1px solid #bcc8bc;border-radius:6px;background:var(--panel);color:var(--green)}
+.emotion-set-help summary::-webkit-details-marker{display:none}
+.emotion-set-help summary:hover,.emotion-set-help details[open] summary{background:var(--green);color:white}
+.emotion-set-help summary:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.emotion-set-help p{position:absolute;bottom:46px;left:0;z-index:5;width:min(420px,65vw);margin:0;padding:14px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink);box-shadow:0 4px 18px #0002;font-size:13px;line-height:1.5}

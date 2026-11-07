@@ -1,0 +1,13 @@
+.image-review-reference-tools{display:flex;align-items:center;gap:8px;margin:0 0 18px}
+.image-review-reference-tools .review-reference-icon{box-sizing:border-box;display:inline-grid;place-items:center;flex:none;width:42px;height:42px;margin:0;padding:9px;border:1px solid #b6c8b7;border-radius:8px;line-height:1;background:#f5f7ef;color:#345e44}
+.review-reference-icon svg{display:block;width:22px;height:22px}
+.image-review-reference-tools .is-approved{background:#d8ead5;border-color:#bdd5b9;color:#235034}
+.image-review-reference-tools .needs-review{background:#f8ecd7;border-color:#dbc39a;color:#855826}
+.image-review-reference-tools .is-obsolete{background:#eee6df;border-color:#c8bbb0;color:#746254}
+.image-review-reference-tools .reference-use{background:var(--green);border-color:var(--green);color:white;cursor:pointer}
+.image-review-reference-tools .reference-use:hover{background:#34684f}
+.review-reference-icon:focus-visible{outline:3px solid #ad8251;outline-offset:3px}
+
+.image-review-reference-tools .reference-approve:not(:disabled){cursor:pointer}
+.image-review-reference-tools .reference-approve:hover:not(:disabled){background:#d8ead5;border-color:#7eab83;color:#235034}
+.image-review-reference-tools .reference-approve:disabled{opacity:.6;cursor:not-allowed}

@@ -1,0 +1,18 @@
+'use strict';
+const examples={
+ characters:{breadcrumb:'CHARACTERS / THE KEEPER',title:'Every character has a story.',description:'Bring likeness, wardrobe, and expression into the same conversation.',image:'portrait',alt:'Illustrative character portrait',label:'Portrait / likeness',kicker:'THE KEEPER',detail:'One identity. Every scene.',copy:'Collect the references that define your character, explore alternatives, and decide which exact versions belong in your production.',items:['Likeness & full-body references','Costumes & hairstyles','Expressions & emotion studies']},
+ locations:{breadcrumb:'LOCATIONS / STILLWATER LAKE',title:'Give your story a sense of place.',description:'Build a visual vocabulary for every place your story takes you.',image:'landscape',alt:'Illustration of an alpine lake at blue hour',label:'Scene reference',kicker:'STILLWATER LAKE',detail:'A place that feels real.',copy:'Gather broad views, specific angles, and the details that make a location recognizable. Keep studies and working selections together as the world develops.',items:['Scene & landscape references','Location coverage & studies','Working selections & approvals']},
+ props:{breadcrumb:'PROPS / THE SIGNAL LANTERN',title:'The smallest detail can carry a story.',description:'Keep the objects that matter close to the world they belong to.',image:'prop',alt:'Illustration of a glowing brass signal lantern',label:'Prop reference',kicker:'THE SIGNAL LANTERN',detail:'Details with a purpose.',copy:'Give supporting objects a place in the catalog. Collect their visual references alongside the characters and locations that bring them into the story.',items:['Named prop records','Supporting visual references','A shared production library']}
+};
+const tabs=[...document.querySelectorAll('[data-category]')];
+function selectCategory(tab){
+ const data=examples[tab.dataset.category];
+ tabs.forEach(button=>{const selected=button===tab;button.setAttribute('aria-selected',String(selected));button.tabIndex=selected?0:-1});
+ document.getElementById('demo-panel').setAttribute('aria-labelledby',tab.id);
+ for(const [id,key] of [['demo-breadcrumb','breadcrumb'],['demo-title','title'],['demo-description','description'],['demo-image-label','label'],['demo-detail-kicker','kicker'],['demo-detail-title','detail'],['demo-detail-copy','copy']])document.getElementById(id).textContent=data[key];
+ const img=document.getElementById('demo-image');img.src=`assets/${data.image}.svg`;img.alt=data.alt;
+ document.getElementById('demo-list').replaceChildren(...data.items.map(text=>{const li=document.createElement('li');li.textContent=text;return li}));
+}
+tabs.forEach((tab,index)=>{tab.addEventListener('click',()=>selectCategory(tab));tab.addEventListener('keydown',event=>{let next;if(['ArrowDown','ArrowRight'].includes(event.key))next=(index+1)%tabs.length;else if(['ArrowUp','ArrowLeft'].includes(event.key))next=(index+tabs.length-1)%tabs.length;else if(event.key==='Home')next=0;else if(event.key==='End')next=tabs.length-1;else return;event.preventDefault();tabs[next].focus();selectCategory(tabs[next])})});
+const copyButton=document.getElementById('copy-command');
+copyButton.addEventListener('click',async()=>{const status=document.getElementById('copy-status');try{await navigator.clipboard.writeText(document.getElementById('install-command').textContent);status.textContent='Commands copied. Paste them into Terminal.';copyButton.textContent='Copied ✓'}catch{const range=document.createRange();range.selectNodeContents(document.getElementById('install-command'));const selection=window.getSelection();selection.removeAllRanges();selection.addRange(range);status.textContent='Commands selected. Press ⌘C or Ctrl+C to copy.'}});

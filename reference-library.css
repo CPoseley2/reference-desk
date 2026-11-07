@@ -1,0 +1,22 @@
+.reference-filters{display:grid;grid-template-columns:repeat(4,minmax(130px,1fr));gap:12px;margin:20px 0}.reference-filters label,.reference-addbar label,.reference-upload label{display:flex;flex-direction:column;gap:7px}.reference-search{grid-column:1/-1}.reference-addbar{display:flex;align-items:end;gap:14px;padding:16px 0;position:sticky;top:0;background:var(--paper,#f3efe7);z-index:2}.reference-addbar label{flex:1}.reference-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}.reference-choice{border:1px solid #9997;padding:10px;border-radius:8px;overflow:hidden}.reference-choice label{display:flex;flex-direction:column;gap:8px;cursor:pointer}.reference-choice input{align-self:flex-start;width:20px;height:20px}.reference-choice img{height:160px;object-fit:contain;width:100%;background:#1e1c19}.reference-choice span{font-size:12px;overflow-wrap:anywhere}.reference-choice p{margin:8px 0}.reference-upload{border-top:1px solid #9997;margin-top:24px;padding-top:18px}.reference-upload button{margin-top:12px}.reference-tags{display:flex;flex-wrap:wrap;gap:4px}#referenceMessage{min-height:24px;font-weight:600}#referenceTagText{width:100%}@media(max-width:700px){.reference-filters{grid-template-columns:1fr 1fr}.reference-addbar{display:block;position:static}.reference-addbar button{margin-top:12px}}
+
+/* Compact roster help; expanded content remains keyboard accessible. */
+.intro[hidden]{display:none}
+#results{display:flex;gap:9px;align-items:center}
+.entry-help{position:relative;flex:none}
+.entry-help>p{position:absolute;top:28px;left:0;width:min(300px,65vw);margin:0;padding:14px;background:var(--panel);border:1px solid var(--line);border-radius:7px;box-shadow:0 4px 16px #0002;z-index:4}
+.record-toolbar #siteGuide{margin:0;border:0;background:transparent;overflow:visible}
+.record-toolbar #siteGuide>summary{display:grid;place-items:center;width:44px;height:44px;min-height:44px;padding:0;list-style:none;border:1px solid #c6cfbd;border-radius:7px;background:var(--panel)}
+.record-toolbar #siteGuide>summary::-webkit-details-marker{display:none}
+.record-toolbar #siteGuide[open]>summary{background:#e1e7d9}
+.record-toolbar #siteGuide>ul{position:absolute;top:54px;left:0;width:min(680px,100%);max-height:65vh;overflow:auto;padding:12px 24px 20px 36px;background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:0 6px 24px #0002;z-index:8}
+
+.reference-filter-panel{margin:20px 0 0;border:1px solid var(--line,#c8cabc);border-radius:7px;background:var(--panel,#fffdf7)}.reference-filter-panel>summary{padding:12px 14px;cursor:pointer;overflow-wrap:anywhere}.reference-filter-panel>summary strong{margin-right:12px}.reference-filter-panel>summary span{font-size:12px;color:var(--muted,#5d6b60)}.reference-filter-panel>summary:focus-visible{outline:2px solid var(--green,#315640);outline-offset:2px}.reference-filter-panel[open]>summary{border-bottom:1px solid var(--line,#c8cabc)}.reference-filter-panel .reference-filters{margin:0;padding:14px}.reference-filter-panel .reference-filters label{min-width:0}.reference-filter-panel input,.reference-filter-panel select{min-width:0;max-width:100%;box-sizing:border-box}@media(max-width:450px){.reference-filter-panel .reference-filters{grid-template-columns:1fr}}
+
+.reference-chooser-upload{padding:16px;margin:16px 0 20px;border:1px solid #b8c9b7;border-radius:8px;background:#eef3e9}.reference-chooser-upload .small{line-height:1.5;margin:8px 0}.reference-chooser-upload-controls{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap}.reference-chooser-upload-controls label{display:grid;gap:7px;min-width:0;flex:1}.reference-chooser-upload input[type=file]{max-width:100%;font:inherit}.reference-chooser-upload [role=status]:empty{display:none}.reference-upload-feedback{padding:12px 14px;border-left:3px solid var(--green);background:#eef3e9;line-height:1.5}
+
+.reference-source-tabs{display:flex;gap:6px;padding:5px;margin:0 0 20px;border:1px solid #c4d0c0;border-radius:10px;background:linear-gradient(120deg,#f5f2e9,#e5eee2)}
+.reference-source-tabs button{flex:1;padding:11px 16px;border:0;border-radius:7px;background:transparent;color:#4d6758;font-weight:600;cursor:pointer}
+.reference-source-tabs button[aria-pressed="true"]{background:#fffdf6;color:#214f3f;box-shadow:0 1px 5px #263f2520}
+.reference-picker[hidden],.reference-generator-view[hidden]{display:none!important}
+.reference-source-tabs button:focus-visible{outline:3px solid #ad8251;outline-offset:2px}
