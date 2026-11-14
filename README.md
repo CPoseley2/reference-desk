@@ -74,6 +74,10 @@ python3 mac-app/build.py
 
 Requires macOS 13+ and Xcode command-line tools. This builds `Reference Desk.app` beside the checkout with a local ad-hoc signature. It is not a notarized installer. The app uses this framework folder, keeps libraries outside the bundle, and lets you choose a different framework folder if you move it. Quitting the window leaves the local service running; use the stop command to stop it.
 
+## Storyboard export integration
+
+The optional [Storyboard Final Cut XML integration](integrations/storyboard-final-cut-export/README.md) exports saved still-image edits and one soundtrack to an editable 1080p Final Cut timeline. It includes source, synthetic tests, and an integration patch for the separate Storyboard Command Center. Final Cut renders the movie. The integration is not automatically enabled in Reference Desk.
+
 ## Development
 
 ```sh

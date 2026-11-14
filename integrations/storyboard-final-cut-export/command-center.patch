@@ -1,0 +1,45 @@
+--- a/server.py
++++ b/server.py
+@@ -60,4 +60,17 @@
+     with LOCK:result=read(ROOT,urllib.parse.parse_qs(u.query).get('id',[''])[0])
+     return self.respond(dict(result,csrf_token=TOKEN))
++   except (ValueError,OSError,KeyError) as e:return self.respond({'error':str(e)},400)
++  if route in ('/library-api/final-cut-export/options','/library-api/final-cut-export/status'):
++   import final_cut_export as fcx
++   try:
++    query=urllib.parse.parse_qs(u.query)
++    if route.endswith('/status'):return self.respond(fcx.job_status(ROOT,query.get('job',[''])[0]))
++    result=fcx.options(ROOT,query.get('id',[''])[0])
++    history=[]
++    for p in sorted((ROOT/'feedback/final-cut-exports').glob('*.json'),key=lambda p:p.stat().st_mtime,reverse=True):
++     record=fcx.job_status(ROOT,p.stem)
++     if record.get('entry_id')==result['id']:history.append(record)
++     if len(history)==5:break
++    return self.respond(dict(result,csrf_token=TOKEN,history=history))
+    except (ValueError,OSError,KeyError) as e:return self.respond({'error':str(e)},400)
+   if route=='/library-api/health':return self.respond({'service':'owl-storyboard-library-v1','root':str(ROOT),'pid':os.getpid()})
+@@ -156,4 +169,12 @@
+   try:data=json.loads(self.rfile.read(n))
+   except ValueError:return self.respond({'error':'Invalid JSON'},400)
++  if self.path in ('/library-api/final-cut-export/preflight','/library-api/final-cut-export/create'):
++   import final_cut_export as fcx
++   try:
++    if self.path.endswith('/create'):return self.respond(fcx.start_job(ROOT,data,approved,resolve_media_path,atomic,LOCK),202)
++    with LOCK:result=fcx.snapshot(ROOT,data,approved,resolve_media_path)
++    return self.respond(fcx.summary(result))
++   except fcx.Conflict as e:return self.respond({'error':str(e)},409)
++   except (ValueError,OSError,KeyError) as e:return self.respond({'error':str(e)},400)
+   if self.path=='/library-api/beat-timing':
+    from beat_timing import save,TimingConflict
+--- a/catalog-ui.js
++++ b/catalog-ui.js
+@@ -11,6 +11,7 @@
+ }
+ function icon(label,symbol,href){return `<a class="button" href="${esc(href)}" title="${esc(label)}" aria-label="${esc(label)}">${symbol}</a>`}
+-function version(e){if(!e)return "";return `<div class="version" data-version-id="${e.id}"><a href="viewer.html?id=${e.id}">${esc(e.title)}</a><small>${e.available_slots}/${e.slots} image slots · ${e.primary?'Selected source':'Older / alternate'}${e.duplicate_of?' · duplicate copy':''}</small><small class="version-date">${esc(formatPacificTimestamp(e.modified))}</small><details class="version-path"><summary title="Show or hide source path" aria-label="Show or hide source path for ${esc(e.title)}"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 7V5h6l2 2h10v13H3V7Z"/></svg></summary><div class="path">${esc(e.path)}</div></details>${e.missing_dependencies.length?`<small class="bad">${e.missing_dependencies.length} unresolved dependencies</small>`:''}</div>`}
+-function card(f){const {entry:e,unmade,status}=filmState(f);return `<article class="card" data-film="${f.id}" data-search="${esc((f.title+' '+status).toLowerCase())}"><div class="tag">${String(f.order).padStart(2,'0')} · Episode ${f.episode}</div><h2>${esc(f.title)}</h2><div class="film-status ${unmade?'unmade':''}">${esc(status)}</div><p class="metric">${e?`${e.available_slots}/${e.slots} image slots`:'—'}</p><div class="actions">${unmade?`<button class="begin" data-brief="${f.id}" aria-label="Begin ${esc(f.title)}">Begin</button>`:''}${e?icon('Open '+f.title+' storyboard and feedback','Open storyboard','viewer.html?id='+e.id):''}${!e&&filmState(f).versions.length?`<button data-versions="${f.id}" aria-label="Choose storyboard version for ${esc(f.title)}">Choose version</button>`:''}${f.movie?icon(f.title+' — '+f.movie.label,'▶',file(f.movie.path)):''}${!unmade?`<button data-brief="${f.id}" title="Production brief for ${esc(f.title)}" aria-label="Production brief for ${esc(f.title)}">ⓘ</button>`:''}</div>${f.versions.length?`<details class="film-versions"><summary>${f.versions.length} versions</summary>${f.versions.map(id=>version(byId[id])).join('')}${(f.archived_movies||[]).map(m=>`<div class="version"><a href="${file(m.path)}">${esc(m.label)}</a><small>Archived film · ${m.width} × ${m.height}</small></div>`).join('')}</details>`:''}</article>`}
++function exportButton(e){return e&&e.slots?`<button type="button" data-fcpxml-id="${esc(e.id)}" aria-label="Export Final Cut XML for ${esc(e.title)}">Export Final Cut XML</button>`:''}
++function version(e){if(!e)return "";return `<div class="version" data-version-id="${e.id}"><a href="viewer.html?id=${e.id}">${esc(e.title)}</a><small>${e.available_slots}/${e.slots} image slots · ${e.primary?'Selected source':'Older / alternate'}${e.duplicate_of?' · duplicate copy':''}</small><small class="version-date">${esc(formatPacificTimestamp(e.modified))}</small><details class="version-path"><summary title="Show or hide source path" aria-label="Show or hide source path for ${esc(e.title)}"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 7V5h6l2 2h10v13H3V7Z"/></svg></summary><div class="path">${esc(e.path)}</div></details>${exportButton(e)}${e.missing_dependencies.length?`<small class="bad">${e.missing_dependencies.length} unresolved dependencies</small>`:''}</div>`}
++function card(f){const {entry:e,unmade,status}=filmState(f);return `<article class="card" data-film="${f.id}" data-search="${esc((f.title+' '+status).toLowerCase())}"><div class="tag">${String(f.order).padStart(2,'0')} · Episode ${f.episode}</div><h2>${esc(f.title)}</h2><div class="film-status ${unmade?'unmade':''}">${esc(status)}</div><p class="metric">${e?`${e.available_slots}/${e.slots} image slots`:'—'}</p><div class="actions">${unmade?`<button class="begin" data-brief="${f.id}" aria-label="Begin ${esc(f.title)}">Begin</button>`:''}${e?icon('Open '+f.title+' storyboard and feedback','Open storyboard','viewer.html?id='+e.id):''}${exportButton(e)}${!e&&filmState(f).versions.length?`<button data-versions="${f.id}" aria-label="Choose storyboard version for ${esc(f.title)}">Choose version</button>`:''}${f.movie?icon(f.title+' — '+f.movie.label,'▶',file(f.movie.path)):''}${!unmade?`<button data-brief="${f.id}" title="Production brief for ${esc(f.title)}" aria-label="Production brief for ${esc(f.title)}">ⓘ</button>`:''}</div>${f.versions.length?`<details class="film-versions"><summary>${f.versions.length} versions</summary>${f.versions.map(id=>version(byId[id])).join('')}${(f.archived_movies||[]).map(m=>`<div class="version"><a href="${file(m.path)}">${esc(m.label)}</a><small>Archived film · ${m.width} × ${m.height}</small></div>`).join('')}</details>`:''}</article>`}
+ $('acts').innerHTML=D.acts.map(a=>`<details class="act" data-act="${a.act}" ${collapse[a.act]?'':'open'}><summary>Act ${['','I','II','III','IV','V'][a.act]}<small>${a.films.length} films · ${a.films.filter(f=>filmState(f).unmade).length} not yet made</small></summary><div class="grid">${a.films.map(card).join('')}</div></details>`).join('');
+ const mapped=new Set(films.map(f=>f.catalog_song));const extras=C.songs.filter(s=>!mapped.has(s)&&C.entries.some(e=>e.song===s));$('extras').hidden=!extras.length;$('songs').innerHTML=extras.map(s=>{const es=C.entries.filter(e=>e.song===s),e=es.find(e=>e.primary)||es[0];return `<article class="card"><h2>${esc(s)}</h2>${icon('Open '+s+' storyboard','▦','viewer.html?id='+e.id)}<details><summary>${es.length} versions</summary>${es.map(version).join('')}</details></article>`}).join('');
