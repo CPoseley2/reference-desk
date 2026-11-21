@@ -14,3 +14,9 @@ jobs:
         run: python3 scripts/check_distribution.py
       - name: Run offline integration tests
         run: python3 -B -m unittest -v test_framework test_libraries test_linked_library
+      - name: Install storyboard media tools
+        run: brew list ffmpeg >/dev/null 2>&1 || brew install ffmpeg
+      - name: Test storyboard XML exporter
+        run: |
+          python3 -B -m unittest discover -s integrations/storyboard-final-cut-export -p 'test_final_cut_export.py' -v
+          node --check integrations/storyboard-final-cut-export/final-cut-export.js
