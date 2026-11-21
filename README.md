@@ -1,13 +1,26 @@
-<p align="center"><a href="https://CPoseley2.github.io/reference-desk/"><img src="docs/assets/banner.svg" alt="Reference Desk — Give your story a world worth remembering" width="100%"></a></p>
-<p align="center"><strong>A home for the visual decisions that make a production feel like one world.</strong></p>
-<p align="center"><a href="https://CPoseley2.github.io/reference-desk/">Explore Reference Desk</a> · <a href="#start-your-first-production">Get started</a> · <a href="CONTRIBUTING.md">Contribute</a></p>
-<p align="center">Local-first · macOS · Python standard library · MIT licensed</p>
+# Reference Desk
 
-Reference Desk is a local production reference workspace for filmmakers, animators, art departments, and independent storytellers. Bring characters, costumes, expressions, locations, and props into one organized desk. Compare possibilities, record decisions, and approve the exact image versions that define your world.
+**A local workspace for organizing visual references and approving the creative decisions behind a production.**
 
-**This repository contains the reusable application and backend. It ships with no production libraries, reference images, saved decisions, or API credentials.** Your first launch creates an empty library on your own Mac.
+Reference Desk helps filmmakers, animators, art departments, and independent storytellers bring characters, costumes, expressions, locations, and props into one organized workspace. Compare alternatives, record decisions, and approve the exact image versions that define your production.
 
-## From inspiration to a consistent world
+[Project overview](https://cposeley2.github.io/reference-desk/) · [Getting started](#start-your-first-production) · [Development guide](DEVELOPMENT.md) · [Contributing](CONTRIBUTING.md)
+
+![Reference Desk — Give your story a world worth remembering](docs/assets/banner.svg)
+
+## At a glance
+
+| Area | Details |
+| --- | --- |
+| Platform | macOS; Python 3.9 or later |
+| Application | Python standard-library backend with an HTML, CSS, and JavaScript interface |
+| Storage | Local project libraries, JSON catalogs, images, and revision history |
+| Optional tools | Image generation through your own OpenAI API account; native macOS wrapper |
+| License | MIT |
+
+The repository contains the reusable application and backend. Your first launch creates an empty library on your Mac; production libraries, reference images, saved decisions, and API credentials are not bundled.
+
+## Features
 
 - **Build a visual cast.** Organize character likenesses, full-body references, hairstyles, wardrobe, and expressions.
 - **Develop places and props.** Keep location coverage, studies, and supporting objects close to your production.
@@ -38,7 +51,7 @@ python3 -B launch_review.py --stop
 
 If port 8876 is already used by another Reference Desk installation, stop that installation first. The launcher refuses to take over another service. A development instance can run in the foreground on a different port with `python3 -B local_review_server.py --port 8877 --open`.
 
-## Your files, your production
+## Project structure & data
 
 ```text
 reference-desk/
@@ -62,7 +75,7 @@ The service listens only on `127.0.0.1`. It is a personal local workspace, not a
 
 Run `python3 -B setup_image_api.py` to store your own API key locally, or provide `OPENAI_API_KEY` in the server environment. Restart the service after changing its environment. Never commit credentials.
 
-The current integration uses [GPT Image 2.5 Sunburst](https://developers.openai.com/api/docs/models/gpt-image-2.5-sunburst). Availability and charges depend on your API account. Explicit generation sends the submitted prompt and selected reference inputs to OpenAI; the rest of your library is not uploaded by this integration. Generated images remain candidates until you approve them.
+The image-generation integration uses your own OpenAI API account. Model availability and charges depend on that account. Explicit generation sends the submitted prompt and selected reference inputs to OpenAI; the rest of your library is not uploaded by this integration. Generated images remain candidates until you approve them.
 
 Offline tests simulate generation. Live paid generation has not been verified for this release.
 
@@ -84,6 +97,10 @@ python3 scripts/check_distribution.py
 The integration tests use disposable copies and loopback servers, with no paid API calls. They cover empty starts, uploads, approvals, save conflicts, migration, library isolation, and linked-media behavior. CI runs on macOS. See [architecture and API notes](DEVELOPMENT.md) and [contribution guidance](CONTRIBUTING.md).
 
 The landing page needs no build tools: `python3 -m http.server 8099 --directory docs`. Open http://localhost:8099/.
+
+## Author
+
+Created by [Collin “Keek” Poseley](https://github.com/CPoseley2).
 
 ## License
 
