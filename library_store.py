@@ -11,6 +11,7 @@ from pathlib import Path
 from types import SimpleNamespace
 
 from location_catalog import slot_definitions
+import library_covers
 
 DATA_FILES = ('manifest.json', 'data.js', 'looks.json', 'roster.json', 'roster.csv',
               'reference-manifest.csv', 'reference-audit.csv', 'looks-audit.csv',
@@ -147,6 +148,7 @@ class LibraryRegistry:
                 result.append({**record, 'url': '/libraries/' + record['id'] + '/',
                                'characters': len(m['characters']), 'locations': len(m.get('locations', [])),
                                'images': len(m['assets']),
+                               'cover': library_covers.public(self.root/record['id'], record['id']),
                                'linked_source_available': Path(record['linked_source_root']).is_dir() if record.get('linked_media') else None})
             return result
 

@@ -31,3 +31,22 @@ Writes require JSON, the exact loopback `Origin`, and `X-DESK-CSRF` from the app
 ## Public website
 
 `docs/` is a standalone static site. GitHub Pages publishes this directory only. Its illustrations and demonstration labels were created for this repository and are not production screenshots. The interactive category switcher is a marketing illustration, not a hosted copy of Reference Desk.
+
+## Portable Command Center and Crescendo
+
+The `command-center/` directory contains the reusable storyboard service and UI.
+It runs separately on loopback port 8899; `setup.py` writes the private framework
+connection. Its source registry accepts explicit JSON manifests, never a broad
+scan of production folders. See [the setup guide](command-center/README.txt).
+Editable catalogs and workspace defaults are seeded only once. Register a new
+source filename for a new version; refreshing never silently replaces saved edits.
+
+Crescendo's engine lives in `crescendo-engine/`. Dependencies are optional for the
+core app. Set `CRESCENDO_PYTHON` to the analyzer environment when testing. Runtime
+outputs remain in library-private state. API tests use synthetic audio and media.
+
+The public site is static in `docs/`, with its feature page at `command-center/`.
+`presentation.js` measures content and moves overflow onto additional pages;
+chapter links, Previous/Next and arrow keys provide navigation. Test both pages
+at desktop and mobile sizes after content changes. Never solve overflow by
+clipping text or shrinking it below a readable size.

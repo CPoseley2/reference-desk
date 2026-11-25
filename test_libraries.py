@@ -25,7 +25,7 @@ class LibraryTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix='desk-libraries-test-')
         self.root = Path(self.temp.name).resolve()/'app'
-        shutil.copytree(SOURCE, self.root, ignore=shutil.ignore_patterns('.git', 'docs', '.state','libraries','__pycache__','assets','thumbs','sources','prompts','catalog-history','generation-records'))
+        shutil.copytree(SOURCE, self.root, ignore=shutil.ignore_patterns('.git', 'docs', 'command-center', '.state','libraries','__pycache__','assets','thumbs','sources','prompts','catalog-history','generation-records'))
         m = empty_manifest('Existing Project')
         add_character(m, 'Existing Character')
         write_seed(self.root, m)

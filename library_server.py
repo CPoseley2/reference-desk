@@ -2,6 +2,8 @@
 import json
 import os
 import secrets
+import re
+import library_covers
 import urllib.parse
 import uuid
 from http.server import ThreadingHTTPServer
@@ -9,6 +11,9 @@ from pathlib import Path
 
 from library_store import LibraryRegistry
 from local_review_server import Handler, MAX
+from outreach_store import OutreachStore, Conflict as OutreachConflict, STATUSES, PRIORITIES, KINDS
+import crescendo_routes
+import storyboard_module
 
 class LibraryHandler(Handler):
     @property
@@ -61,6 +66,13 @@ class LibraryHandler(Handler):
             return self.reply(200, {'libraries': self.server.libraries.list(),
                                    'default_library_id': self.server.libraries.catalog['default_library_id'],
                                    'csrf_token': self.server.app_token})
+        cover = re.fullmatch(r'/api/libraries/([a-f0-9]{32})/cover', path)
+        if cover:
+            try: self.server.libraries.lookup(cover[1])
+            except KeyError: return self.reply(404, {'error': 'Library not found'})
+            image = library_covers.image_path(self.server.libraries.root/cover[1])
+            if image is None or not image.is_file(): return self.reply(404, {'error': 'No cover photo'})
+            return self.send_file(image)
         if path in ('/', '/index.html'):
             return self.send_file(self.server.app_root/'app.html')
         if path in ('/library-manager.js', '/library-manager.css', '/style.css'):
@@ -70,6 +82,21 @@ class LibraryHandler(Handler):
             if p.is_relative_to(self.server.app_root/'ui-assets') and p.is_file(): return self.send_file(p)
             return self.reply(404, {'error': 'Not found'})
         if not self.route_library(): return self.reply(404, {'error': 'Library not found'})
+        local_path = urllib.parse.urlsplit(self.path).path
+        if crescendo_routes.get(self, local_path): return
+        if storyboard_module.get(self, local_path): return
+        if local_path == '/api/outreach':
+            return self.reply(200, {**OutreachStore(self.store.dir).public(), 'csrf_token': self.store.token,
+                                   'stages': STATUSES, 'priorities': PRIORITIES, 'activity_kinds': KINDS})
+        if local_path == '/api/outreach/export.csv':
+            data = OutreachStore(self.store.dir).csv_export()
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/csv; charset=utf-8')
+            self.send_header('Content-Disposition', 'attachment; filename="theater-outreach.csv"')
+            self.send_header('Content-Length', str(len(data)))
+            self.send_header('Cache-Control', 'no-store')
+            self.end_headers()
+            return self.write_bytes(data)
         if urllib.parse.urlsplit(self.path).path == '/library-context.js':
             info = {'id': self.library_id, 'name': self.library_record['name'],
                     'base': '/libraries/' + self.library_id + '/',
@@ -87,6 +114,27 @@ class LibraryHandler(Handler):
 
     def do_POST(self):
         path = urllib.parse.urlsplit(self.path).path
+        cover = re.fullmatch(r'/api/libraries/([a-f0-9]{32})/cover', path)
+        if cover:
+            if not self.hostok() or self.headers.get('Origin') != self.server.origin or self.headers.get('X-DESK-CSRF') != self.server.app_token:
+                return self.reply(403, {'error': 'Same-origin application token required'})
+            if self.headers.get('Content-Type', '').split(';')[0] != 'application/json':
+                return self.reply(415, {'error': 'JSON required'})
+            try:
+                self.server.libraries.lookup(cover[1])
+            except KeyError: return self.reply(404, {'error': 'Library not found'})
+            root = self.server.libraries.root/cover[1]
+            try:
+                n = int(self.headers.get('Content-Length', '0'))
+                if not 0 < n <= library_covers.MAX_BODY: return self.reply(413, {'error': 'Choose an image smaller than 12 MB.'})
+                library_covers.mutate(root, json.loads(self.rfile.read(n)))
+                return self.reply(200, {'cover': library_covers.public(root, cover[1])})
+            except library_covers.Conflict as error:
+                return self.reply(409, {'error': str(error)})
+            except (ValueError, TypeError) as error:
+                return self.reply(400, {'error': str(error)})
+            except OSError:
+                return self.reply(500, {'error': 'Could not save the cover. Keep this dialog open and try again.'})
         if path in ('/api/libraries','/api/libraries/import'):
             if not self.hostok() or self.headers.get('Origin') != self.server.origin or self.headers.get('X-DESK-CSRF') != self.server.app_token:
                 return self.reply(403, {'error': 'Same-origin application token required'})
@@ -102,6 +150,24 @@ class LibraryHandler(Handler):
             except (ValueError, TypeError, AttributeError, OSError, KeyError) as error:
                 return self.reply(400, {'error': str(error)})
         if not self.route_library(): return self.reply(404, {'error': 'Library not found'})
+        if crescendo_routes.post(self, urllib.parse.urlsplit(self.path).path): return
+        if storyboard_module.post(self, urllib.parse.urlsplit(self.path).path): return
+        if urllib.parse.urlsplit(self.path).path == '/api/outreach':
+            if not self.hostok() or self.headers.get('Origin') != self.server.origin or self.headers.get('X-DESK-CSRF') != self.store.token:
+                return self.reply(403, {'error': 'Same-origin library token required'})
+            if self.headers.get('Content-Type', '').split(';')[0] != 'application/json':
+                return self.reply(415, {'error': 'JSON required'})
+            try:
+                n = int(self.headers.get('Content-Length', '0'))
+                if not 0 < n <= MAX: return self.reply(413, {'error': 'Invalid payload size'})
+                record = OutreachStore(self.store.dir).mutate(json.loads(self.rfile.read(n)))
+                return self.reply(200, {'record': record})
+            except OutreachConflict as error:
+                return self.reply(409, {'error': str(error), 'record': error.record})
+            except (ValueError, TypeError, KeyError) as error:
+                return self.reply(400, {'error': str(error)})
+            except OSError:
+                return self.reply(500, {'error': 'Could not save outreach. Keep this window open and retry.'})
         return super().do_POST()
 
 def create_app_server(root, state, port):

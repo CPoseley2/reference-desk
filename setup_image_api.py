@@ -11,7 +11,7 @@ def main():
     print('This only stores your key. Image charges occur when you click Generate in the desk.\n')
     key=getpass.getpass('API key (hidden; blank cancels): ').strip()
     if not key:print('Cancelled. Existing configuration kept.');return
-    if len(key)<20 or any(c.isspace() for c in key):raise ValueError('Invalid key format; existing configuration kept.')
+    if not key.startswith('sk-') or len(key)<20 or any(c.isspace() for c in key):raise ValueError('Invalid key format; existing configuration kept.')
     state.mkdir(parents=True,exist_ok=True)
     fd,name=tempfile.mkstemp(prefix='.image-api-key-',dir=state)
     try:

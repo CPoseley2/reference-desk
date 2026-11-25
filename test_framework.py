@@ -23,7 +23,7 @@ class FrameworkTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix='reference-desk-test-')
         self.root = Path(self.temp.name)/'desk'
-        shutil.copytree(ROOT, self.root, ignore=shutil.ignore_patterns('.git', 'docs', '.state', '__pycache__', 'libraries', 'assets', 'thumbs', 'sources', 'prompts', 'catalog-history', 'generation-records'))
+        shutil.copytree(ROOT, self.root, ignore=shutil.ignore_patterns('.git', 'docs', 'command-center', '.state', '__pycache__', 'libraries', 'assets', 'thumbs', 'sources', 'prompts', 'catalog-history', 'generation-records'))
         write_catalog(self.root, empty_manifest())
         for name in ('exploration-actions.js','location-story-structure.js','requested-revisions.html'):
             shutil.copy2(ROOT/'library-templates'/name,self.root/name)
@@ -55,6 +55,18 @@ class FrameworkTests(unittest.TestCase):
         status, raw=self.request(path,payload)
         self.assertEqual(status,200,raw.decode())
         return json.loads(raw)
+
+    def test_generation_access_check_requires_csrf_and_preserves_report(self):
+        from unittest.mock import patch
+        expected = {'state':'verified', 'configured':True, 'message':'Checked without generation'}
+        with patch('api_diagnostics.status', return_value=expected) as check:
+            status, _ = self.request('/api/generation/check', {}, authorized=False)
+            self.assertEqual(status, 403)
+            check.assert_not_called()
+            report = self.post('/api/generation/check', {})
+            self.assertEqual(report['diagnostics']['state'], 'verified')
+            self.assertTrue(check.call_args.args[2])
+            self.assertEqual(report['active_jobs'], [])
 
     def test_clean_start_and_static_dependencies(self):
         m=json.loads((self.root/'manifest.json').read_text())

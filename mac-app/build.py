@@ -6,7 +6,7 @@ root = Path(__file__).resolve().parent.parent
 app = root.parent/'Reference Desk.app'
 contents = app/'Contents'
 for directory in ['MacOS','Resources']:(contents/directory).mkdir(parents=True,exist_ok=True)
-info = {'CFBundleName':'Reference Desk','CFBundleDisplayName':'Reference Desk','CFBundleIdentifier':'com.reference-desk.mac','CFBundleExecutable':'ReferenceDesk','CFBundlePackageType':'APPL','CFBundleShortVersionString':'1.0','CFBundleVersion':'1','LSMinimumSystemVersion':'13.0','NSHighResolutionCapable':True,'CFBundleIconFile':'AppIcon','ReferenceDeskFrameworkPath':str(root),'NSAppTransportSecurity':{'NSAllowsLocalNetworking':True},'NSHumanReadableCopyright':'Reference Desk — local reference libraries'}
+info = {'CFBundleName':'Reference Desk','CFBundleDisplayName':'Reference Desk','CFBundleIdentifier':'com.reference-desk.mac','CFBundleExecutable':'ReferenceDesk','CFBundlePackageType':'APPL','CFBundleShortVersionString':'1.1','CFBundleVersion':'2','LSMinimumSystemVersion':'13.0','NSHighResolutionCapable':True,'CFBundleIconFile':'AppIcon','ReferenceDeskFrameworkPath':str(root),'NSAppTransportSecurity':{'NSAllowsLocalNetworking':True},'NSHumanReadableCopyright':'Reference Desk — local reference libraries'}
 (contents/'Info.plist').write_bytes(plistlib.dumps(info))
 env = dict(os.environ, CLANG_MODULE_CACHE_PATH='/private/tmp/reference-desk-clang-cache', SWIFT_MODULECACHE_PATH='/private/tmp/reference-desk-swift-cache')
 subprocess.run(['/usr/bin/xcrun','swiftc','-swift-version','5','-O','-framework','Cocoa','-framework','WebKit',str(root/'mac-app/ReferenceDesk.swift'),'-o',str(contents/'MacOS/ReferenceDesk')],check=True,env=env)

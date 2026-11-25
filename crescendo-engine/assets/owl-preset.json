@@ -1,0 +1,11 @@
+{
+  "name": "Static-image production",
+  "unique_images": true,
+  "static_images": true,
+  "pan_zoom": false,
+  "cropped_filler": false,
+  "max_shot_seconds_exclusive": 3,
+  "setting_first": true,
+  "meaningful_angle_or_size_change": true,
+  "locked_lyric_order_and_attribution": true
+}

@@ -540,3 +540,30 @@ body>header #deskTools .desk-tools-menu :is(button,a):hover{background:#e5ebdf;c
 .add-character-button{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:8px 16px;font-weight:600}.add-character-button span{font-size:21px;line-height:1}.character-create-form{display:grid;gap:14px;max-width:560px}.character-create-form label{display:grid;gap:6px}.character-create-form input,.character-create-form textarea{width:100%;box-sizing:border-box}.character-create-form .small,.character-create-form [role=status]{margin:0}.character-create-actions{display:flex;justify-content:flex-end;gap:10px}.character-create-actions button[type=submit]{background:var(--green,#284e40);color:#fff}
 
 #modal:has(.character-create-form){width:min(640px,calc(100vw - 40px))}.character-create-form{max-width:none}
+
+/* Outfit previews use the available card width; actions stay together below. */
+.look-primary{display:block;padding:18px 0 8px}
+.look-primary .look-candidate-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:12px;max-width:none;width:100%}
+.look-primary .look-selected-image,.look-primary .look-candidate-image{display:block;width:100%;min-width:0;border:1px solid #b8c6b1;border-radius:8px;background:#e7e6dd}
+.look-primary .look-selected-image img,.look-primary .look-candidate-image img{display:block;width:100%;height:clamp(230px,32vw,380px);object-fit:contain;background:#e7e6dd}
+.look-primary .look-candidate-strip:has(> :nth-child(2)) img{height:clamp(180px,24vw,300px)}
+.look-next{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:14px}
+.look-action-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.look-action-toolbar .look-icon-action{position:relative;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;border:1px solid #aabbaa;border-radius:7px;background:#fffdf5;color:var(--green)}
+.look-action-toolbar .look-icon-action svg{width:23px;height:23px}
+.look-action-toolbar .look-primary-button{background:var(--green);color:#fff;border-color:var(--green)}
+.look-action-toolbar .look-icon-action:hover{box-shadow:0 0 0 2px #8da58b55}
+.look-action-toolbar .look-icon-action:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+.look-action-toolbar .look-icon-action::after{left:0;transform:none;max-width:220px;text-align:left;transition:opacity .12s,visibility .12s;transition-delay:0s}
+.look-action-toolbar .look-icon-action:hover::after{transition-delay:1s}
+.look-action-toolbar .look-icon-action:focus-visible::after{transition-delay:0s}
+.look-next>.look-action-hint{margin:0;flex:1;min-width:140px}
+.look-empty-preview{padding:25px;text-align:center;border:1px dashed #b8c6b1;border-radius:8px;color:var(--muted)}
+@media(max-width:680px){.look-primary .look-selected-image img,.look-primary .look-candidate-image img{height:280px;max-height:50vh}.look-next{gap:10px}.look-next>.look-action-hint{flex-basis:100%}.look-action-toolbar .look-icon-action:nth-last-child(-n+2)::after{left:auto;right:0}}
+
+.look-suggestion{min-width:0}.look-suggestion>.look-suggested-choice{margin-top:10px;width:100%}
+.look-suggested-choice{padding:11px 15px;min-height:44px;border-radius:7px;font-weight:600}
+.look-suggested-choice.is-unapproved{background:#f5d6b4;border-color:#b86b24;color:#713b0d}
+.look-suggested-choice.is-approved{background:#d4e8d3;border-color:#6b9873;color:#205735}
+.look-suggested-choice:disabled{opacity:1;cursor:default}
+.look-suggested-choice:focus-visible{outline:2px solid var(--green);outline-offset:3px}

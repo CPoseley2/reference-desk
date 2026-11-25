@@ -1,0 +1,18 @@
+const assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs'),path=require('node:path');
+const code=fs.readFileSync(path.join(__dirname,'../catalog-ui.js'),'utf8').split("$('acts').innerHTML=")[0];
+const entry={id:'made',slots:72,available_slots:72,missing_dependencies:[],title:'Made board',path:'/board.html'};
+const context={window:{CATALOG:{entries:[entry]},COMMAND_CENTER:{acts:[]}},location:{protocol:'http:'},localStorage:{getItem:()=>null},document:{getElementById:()=>null},formatPacificTimestamp:()=>''};
+vm.createContext(context);vm.runInContext(code,context);
+const base={id:'a2-01',title:'Made film',order:1,episode:3,status:'Not yet made',entry_id:null,versions:[],movie:null};
+let film={...base,entry_id:'made',versions:['made']};
+assert.equal(context.filmState(film).status,'Storyboard available');
+assert.match(context.card(film),/aria-label="Open Made film storyboard and feedback"/);assert.doesNotMatch(context.card(film),/aria-label="Begin Made film"|Not yet made/);
+film={...base,versions:['made']};
+assert.equal(context.filmState(film).status,'Storyboard versions available');
+assert.match(context.card(film),/aria-label="Choose storyboard version for Made film"/);assert.doesNotMatch(context.card(film),/aria-label="Begin Made film"|Not yet made/);
+film={...base,entry_id:'missing',versions:['missing']};
+assert.equal(context.filmState(film).status,'Storyboard source unavailable');assert.doesNotMatch(context.card(film),/aria-label="Begin Made film"/);
+assert.equal(context.filmState(base).unmade,true);assert.match(context.card(base),/aria-label="Begin Made film"/);
+film={...base,movie:{path:'/film.mp4',height:1080,label:'Finished film'}};
+assert.equal(context.filmState(film).status,'HD export');assert.doesNotMatch(context.card(film),/aria-label="Begin Made film"|Not yet made/);
+console.log('Catalog regression checks passed: completed, missing selection, missing source, untouched unmade, and existing export.');

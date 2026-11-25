@@ -2,6 +2,8 @@
 #libraryDialog{width:min(520px,calc(100vw - 40px));padding:26px;background:#f7f5ec;border:1px solid #bcc8b4;border-radius:10px;color:#263e32}#libraryDialog::backdrop{background:#14291fd4}.library-dialog-heading{display:flex;align-items:center;justify-content:space-between;gap:15px}.library-dialog-heading h2{margin:0;font-size:25px}.library-dialog-heading button{font-size:24px;padding:1px 10px;background:transparent;border:0}#libraryDialog p{font-size:14px;line-height:1.6;color:#687261}#libraryDialog label{display:grid;gap:8px;font-weight:600}#libraryDialog input{width:100%;box-sizing:border-box;padding:12px;font-size:16px}.library-dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.library-form-status:empty{display:none}#libraryStatus:empty{display:none}
 @media(max-width:760px){.library-home-main{padding:28px 18px}.library-home-heading{align-items:flex-start;flex-direction:column}.library-home-heading h1{font-size:32px}.library-local{display:none}}
 
+.library-outreach{display:flex;align-items:center;justify-content:space-between;padding:13px 10px;margin:8px 0 16px;border:1px solid #c4cfbc;border-radius:6px;background:#eef1e6;color:#284e40;text-decoration:none;font-size:12px;font-weight:650;min-height:42px}.library-outreach:hover{background:#dfe8d7}.library-card .library-outreach{margin:12px 0 0;padding:10px 12px;min-height:40px}
+
 /* One compact header row. Explicit sizing overrides the older fixed-height header. */
 body>header.desk-header{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto;align-items:center;gap:12px;height:auto;min-height:88px;padding:12px 24px;overflow:visible}
 .desk-header>.brand{grid-column:1;grid-row:1;min-width:0;width:fit-content;max-width:100%;margin:0;overflow:hidden}
@@ -43,3 +45,46 @@ body>header.desk-header>.topactions{grid-column:4;grid-row:1;display:flex;align-
  .desk-header .brand-canvas{display:block;font-size:14px;letter-spacing:1px}
  .library-menu-panel{right:12px}
 }
+
+/* Stage shortcut shares the header controls’ size and finish. */
+body>header.desk-header .topactions>.header-outreach{display:grid;place-items:center;flex:none;width:44px;height:44px;padding:0;margin:0;border:1px solid #a59b7a;border-radius:6px;background:#203e33d9;color:#f6efdc;text-decoration:none}
+body>header.desk-header .topactions>.header-outreach:hover{background:#3b584b}
+body>header.desk-header .topactions>.header-outreach:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+
+/* Crescendo shares the header and save-aware navigation in Web and WKWebView. */
+body>header.desk-header .topactions>.header-crescendo{display:flex;align-items:center;gap:8px;flex:none;height:44px;padding:0 12px;border:1px solid #a59b7a;border-radius:6px;background:#203e33d9;color:#f6efdc;text-decoration:none;font-size:12px;font-weight:600}
+.header-crescendo>span:first-child{font-size:23px;font-weight:400}
+body>header.desk-header .topactions>.header-crescendo:hover{background:#3b584b}
+.header-crescendo:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+@media(max-width:1000px){body>header.desk-header>.topactions{gap:7px}body>header.desk-header{gap:8px;padding-left:16px;padding-right:16px}.desk-header>.generation-activity-dock{width:min(180px,20vw)}}
+@media(max-width:600px){body>header.desk-header{grid-template-columns:minmax(0,1fr) auto}.desk-header>.library-switcher{grid-column:2}.desk-header>.generation-activity-dock{grid-column:1;grid-row:2;width:100%}body>header.desk-header>.topactions{grid-column:1 / -1;grid-row:3;justify-content:flex-end}}
+
+/* Keep module names readable at the native window minimum width. */
+@media(min-width:701px) and (max-width:1150px){body>header.desk-header{grid-template-columns:minmax(0,1fr) auto auto}.desk-header>.library-switcher{grid-column:2}body>header.desk-header>.topactions{grid-column:3}.desk-header>.generation-activity-dock{grid-column:1/-1;grid-row:2;width:100%;max-width:none}}
+
+/* Library covers and direct collection links. */
+.library-card{min-width:0;overflow:hidden;padding:0 22px 22px}
+.library-cover{position:relative;aspect-ratio:16/9;margin:0 -22px;background:#e2e7d9;overflow:hidden;border-bottom:1px solid #d4d5c5}
+.library-cover-open{display:block;width:100%;height:100%;color:#58715d;text-decoration:none}
+.library-cover img,.library-cover-preview img{display:block;width:100%;height:100%;object-fit:cover}
+.library-cover-empty{display:flex;height:100%;align-items:center;justify-content:center;flex-direction:column;gap:10px;background:linear-gradient(135deg,#e9eddf,#d4dfcb);font-size:13px}
+.library-cover-empty>svg{width:38px;height:38px;opacity:.65}
+.library-cover-edit{position:absolute;right:12px;bottom:12px;display:grid;place-items:center;width:44px;height:44px;padding:0;border:1px solid #fff9;border-radius:50%;background:#234d3deb;color:#fff;box-shadow:0 2px 8px #14291f30;cursor:pointer}
+.library-cover-edit:hover{background:#173d2e}
+.library-cover .library-recent{position:absolute;top:12px;left:12px;pointer-events:none;background:#faf8f0ed;color:#284e40}
+.library-card h2 a{color:inherit;text-decoration:none}.library-card h2 a:hover{text-decoration:underline}
+.library-card dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:20px -6px}
+.library-card dl>div{display:block;min-width:0}.library-card dt{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.library-card dd a{display:flex;flex-direction:column;gap:5px;padding:10px 6px;border:1px solid #dde3d5;border-radius:7px;background:#eef1e6;color:#284e40;text-decoration:none;font-variant-numeric:tabular-nums}
+.library-card dd a span{font-size:12px;color:#536650}.library-card dd a:hover{background:#e7eddc;border-color:#c4cfbc}
+.library-card a:focus-visible,.library-card button:focus-visible{outline:3px solid #b68a40;outline-offset:-3px}
+#libraryCoverDialog{width:min(560px,calc(100vw - 32px));max-height:90dvh;overflow:auto;padding:24px;box-sizing:border-box;background:#f7f5ec;border:1px solid #bcc8b4;border-radius:12px;color:#263e32}
+#libraryCoverDialog::backdrop{background:#14291fc9}.library-cover-name{font-weight:600;overflow-wrap:anywhere;margin:12px 0 18px}
+.library-cover-preview{display:grid;place-items:center;aspect-ratio:16/9;background:#e2e7d9;border:1px solid #c6d0bc;border-radius:7px;overflow:hidden;color:#58715d}
+.library-cover-help{font-size:12px;line-height:1.6;color:#687261}.library-cover-actions{display:flex;flex-wrap:wrap;gap:10px}
+.library-cover-actions button{display:flex;align-items:center;gap:8px;min-height:44px}.library-cover-remove{color:#8b3927}
+#libraryCoverDialog .library-form-status{font-size:14px;line-height:1.5}#libraryCoverDialog button:disabled{opacity:.5;cursor:wait}
+
+/* Keep the common header steady when switching between library and Storyboards. */
+.desk-header>.generation-activity-dock>.generation-activity>summary{min-height:70px}
+@media(max-width:760px){.desk-header>.generation-activity-dock>.generation-activity>summary{min-height:62px}}

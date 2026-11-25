@@ -1,0 +1,14 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
+const root=path.join(__dirname,'..'),app=fs.readFileSync(path.join(root,'app.js'),'utf8'),canon=fs.readFileSync(path.join(root,'canon.js'),'utf8');
+const c={id:'sample-person',looks:[{id:'sample-winter',name:'Winter'}]},l=c.looks[0],a={id:'sample-image',title:'Winter outfit',sha256:'exact-hash',character_ids:[c.id],status:'Candidate'};
+let disk={pairs:{},canonical_references:{}},saveCount=0;
+const ctx={assets:new Map([[a.id,a]]),people:new Map([[c.id,c]]),review:{pairs:{},notes:{},canonical_references:{}},approvalSource:()=>disk,canonKey:(role,lid)=>role+'@'+lid,canonCurrent:(cid,source)=> (source||ctx.review).canonical_references?.[cid]||{},isApprovedReference:(a,cid,hash)=>Object.values(disk?.canonical_references?.[cid]||{}).some(r=>r.id===a.id&&r.source_sha256===hash),lookReadyState:()=>({selected:null,candidates:[a]}),lookDisplayName:l=>l.name,esc:String,canonDestinationAllowed:()=>true,effectiveStatus:a=>a.status,knownSourceHash:(a,h)=>a.sha256===h,crypto:{randomUUID:()=>String(Math.random())},save:()=>saveCount++,document:{addEventListener(){},querySelectorAll:()=>[]},window:{addEventListener(){}}};
+vm.createContext(ctx);vm.runInContext(canon.slice(canon.indexOf('function canonSelect('),canon.indexOf('function canonDialog(')),ctx);vm.runInContext(app.slice(app.indexOf('const openOutfitCards='),app.indexOf('function lookPrimaryAction(')),ctx);
+assert.match(ctx.suggestedOutfitButton(c,l,a),/is-unapproved/);assert.match(ctx.suggestedOutfitButton(c,l,a),/Choose suggested image/);
+ctx.chooseSuggestedOutfit(c.id,l.id,a.id,a.sha256);assert.equal(saveCount,1);assert.equal(ctx.review.canonical_references[c.id]['body@sample-winter'].source_sha256,'exact-hash');assert.equal(ctx.review.canon_history.length,1);
+assert.equal(ctx.suggestedOutfitState(c.id,l.id,a.id,a.sha256).approved,false,'Not green until saved');assert.match(ctx.suggestedOutfitButton(c,l,a),/Saving choice/);
+disk=JSON.parse(JSON.stringify(ctx.review));assert.match(ctx.suggestedOutfitButton(c,l,a),/is-approved/);assert.match(ctx.suggestedOutfitButton(c,l,a),/Approved · selected/);
+ctx.chooseSuggestedOutfit(c.id,l.id,a.id,a.sha256);assert.equal(saveCount,1,'Repeated selection does not create duplicate history');
+assert.throws(()=>ctx.chooseSuggestedOutfit(c.id,l.id,a.id,'changed-hash'),/suggested image changed/);
+disk=null;assert.equal(ctx.suggestedOutfitState(c.id,l.id,a.id,a.sha256).ready,false);assert.throws(()=>ctx.chooseSuggestedOutfit(c.id,l.id,a.id,a.sha256),/Wait for saved approvals/);
+console.log('Suggested outfits: exact-image selection, save-pending state, saved approval, duplicate prevention, and stale-image protection passed.');

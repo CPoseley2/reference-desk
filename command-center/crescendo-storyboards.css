@@ -1,0 +1,11 @@
+.crescendo-coverage{display:flex;justify-content:space-between;gap:24px;align-items:center;padding:22px 24px;margin:0 0 24px;border:1px solid #577d79;border-radius:10px;background:#172f32}.crescendo-coverage p{margin:5px 0}.crescendo-coverage strong{font-size:21px}.crescendo-result{border-top:1px solid var(--line);margin-top:18px;padding-top:14px;font-size:14px}.crescendo-state{font-weight:700;color:#f0c17e}.crescendo-state.complete{color:#a8e4ca}.crescendo-result p{margin:8px 0}.crescendo-metrics{font-variant-numeric:tabular-nums;color:#c4d9df}.crescendo-actions{display:flex;gap:10px 16px;align-items:center;flex-wrap:wrap}.crescendo-actions a{font-weight:600}.crescendo-actions button{font-size:13px}.crescendo-result summary{font-size:14px;padding:10px 0}.crescendo-notice{color:#f0c17e}.crescendo-source{overflow-wrap:anywhere}.crescendo-cues{padding-left:20px;max-height:310px;overflow:auto}.crescendo-cues li{padding:5px 0 12px}.crescendo-cues button{padding:6px 10px;font-size:13px}.crescendo-cues small{display:block;margin-top:4px}.crescendo-act-count{color:#a8e4ca!important}.crescendo-result .path{font-size:11px}#crescendo-viewer .crescendo-result{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 22px}#crescendo-viewer .crescendo-cues{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px 26px;max-height:none}#crescendo-viewer audio{max-width:720px;display:block}@media(max-width:700px){.crescendo-coverage{display:block}.crescendo-coverage>.crescendo-actions{margin-top:14px}}
+
+.crescendo-sheet-toggle{color:#f0c17e}.crescendo-sheet-toggle.complete{color:#a8e4ca}
+.command-center #crescendo-sheet{box-sizing:border-box;width:min(740px,calc(100vw - 24px));max-height:88vh;padding:22px}
+.crescendo-sheet-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.command-center .crescendo-sheet-heading h2{padding:0;margin:0;font-size:21px;min-width:0}
+#crescendo-sheet .crescendo-result{margin-top:16px}
+.command-center #crescendo-sheet details,#crescendo-sheet .crescendo-cues{max-height:none;overflow:visible}
+#crescendo-sheet audio{display:block;width:100%;margin-top:16px}
+#crescendo-sheet audio[hidden]{display:none}
+#crescendo-sheet .crescendo-cues button{max-width:100%;white-space:normal;text-align:left}

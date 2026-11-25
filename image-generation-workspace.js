@@ -30,6 +30,7 @@ function render(){const Core=DESKExplorationCore,chars=[...D.characters].sort((a
  if(context){q('character').disabled=true;q('type').disabled=true;if(context.lookId)q('look').disabled=true;q('filter').value=context.characterId;gallery();}
 
  panel=DESKGeneration.mount(q('generation'),null,{storageKey:options.jobKey||'desk-studio-image-job-v1',request});panel.invalidate('Describe your image, then click Create prompt.');
+ const apiButton=document.createElement('button');apiButton.type='button';apiButton.className='studio-api-button';apiButton.textContent='API status & diagnostics';apiButton.onclick=()=>panel.showDiagnostics();workspace.querySelector('.studio-heading').append(apiButton);
  q('form').onsubmit=createPrompt;
  // Keep disclosure preferences separate from the image draft.
  const disclosureKey=embedded?storage+':disclosures':'desk-studio-disclosures-v1';let disclosures={};

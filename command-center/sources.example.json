@@ -1,0 +1,6 @@
+{
+  "name": "Your production",
+  "sources": [
+    {"path": "/absolute/path/to/your/storyboard.json", "title": "Opening sequence v1", "production": "Your film", "act": 1, "primary": true}
+  ]
+}

@@ -2,6 +2,7 @@
 import base64, copy, fcntl, hashlib, json, mimetypes, os, re, threading, time, urllib.request, urllib.error, uuid
 from pathlib import Path
 import reference_catalog
+import api_diagnostics
 
 MODEL='gpt-image-2.5-sunburst'
 SIZES={'3:2 landscape':'1536x1024','2:3 portrait':'1024x1536','16:9 widescreen':'1536x864','1:1 square':'1024x1024'}
@@ -69,7 +70,7 @@ def api_key(state_dir):
         if path.stat().st_mode & 0o077: raise JobError('API key file must be private (permissions 600). Run Set Up Image API.command again.')
         key=path.read_text().strip()
     if not key: raise JobError('Run Set Up Image API.command to configure the server API key, then refresh connection status.')
-    if len(key)<20 or any(c.isspace() for c in key): raise JobError('API key format is invalid. Run Set Up Image API.command again.')
+    if not key.startswith('sk-') or len(key)<20 or any(c.isspace() for c in key): raise JobError('API key format is invalid. Run Set Up Image API.command again.')
     return key
 
 def call_openai(request,inputs,key):
@@ -153,14 +154,15 @@ class Manager:
     def release_job(self,jid):
         for slot,value in list(self.active_jobs.items()):
             if value==jid:self.active_jobs.pop(slot)
-    def config(self):
-        try: api_key(getattr(self.store,'api_state_dir',self.store.dir));ready=True;message='Server key configured. API access and available credits are checked by OpenAI when you generate.'
-        except JobError as e: ready=False;message=str(e)
+    def config(self,check=False):
+        diagnostics=api_diagnostics.status(getattr(self.store,'api_state_dir',self.store.dir),MODEL,check)
+        diagnostics['latest_job']=api_diagnostics.recent_job(self.dir)
+        ready=diagnostics['configured'];message=diagnostics['message']
         with self.lock:
             active=self.active;active_jobs=list(self.active_jobs.values());queued=list(self.queue)
             lanes={lane:{'active_job':next(iter(self.active_for_lane(lane)),None),'active_jobs':self.active_for_lane(lane),'capacity':capacity,'queued_jobs':[i for i in queued if self.job_lanes[i]==lane]} for lane,capacity in LANE_CAPACITY.items()}
             cooldown_until=self.cooldown_until
-        return {'configured':ready,'location_beta':True,'model':MODEL,'qualities':['medium','high'],'sizes':SIZES,'message':message,'active_job':active,'active_jobs':active_jobs,'concurrency':sum(LANE_CAPACITY.values()),'generation_lanes':lanes,'cooldown_until':cooldown_until,'queue_supported':True,'queued_jobs':queued,'queue_length':len(queued),'billing_url':'https://platform.openai.com/settings/organization/billing/overview'}
+        return {'diagnostics':diagnostics,'configured':ready,'location_beta':True,'model':MODEL,'qualities':['medium','high'],'sizes':SIZES,'message':message,'active_job':active,'active_jobs':active_jobs,'concurrency':sum(LANE_CAPACITY.values()),'generation_lanes':lanes,'cooldown_until':cooldown_until,'queue_supported':True,'queued_jobs':queued,'queue_length':len(queued),'billing_url':'https://platform.openai.com/settings/organization/billing/overview'}
     def save(self,job):
         job['updated_at']=time.time();self.store.atomic(self.dir/job['id']/'job.json',job)
     def read(self,jid):
@@ -279,6 +281,8 @@ class Manager:
         except Exception as e:
             if isinstance(e,JobError) and e.diagnostics:
                 job['api_error']=e.diagnostics
+                if e.diagnostics.get('http_status')==401:
+                    api_diagnostics.remember(getattr(self.store,'api_state_dir',self.store.dir),key,MODEL,{'state':'rejected','configured':False,'checked_at':time.time(),'message':str(e),'api_error':e.diagnostics})
                 if e.diagnostics.get('http_status')==429 and (e.diagnostics.get('code') in ('rate_limit_exceeded','slow_down') or e.diagnostics.get('type') in ('rate_limit_error','rate_limit_exceeded')):
                     with self.lock:self.cooldown_until=max(self.cooldown_until,time.time()+max(1,e.diagnostics.get('retry_after_seconds',30)))
             job['status']='save_failed' if (self.dir/jid/'output.png').exists() else 'failed'

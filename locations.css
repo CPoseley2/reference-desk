@@ -330,3 +330,8 @@ body.location-mode{overflow-anchor:none}
 .location-feature-heading select.location-view-review{background:#fff0d7;border-color:#dba55c;color:#754713}
 .location-feature-heading select.location-view-empty{background:#efeee7;border-color:#c9c9bc;color:#62665c}
 .location-feature-heading select option{background:var(--paper);color:var(--ink)}
+
+/* Keep active location constraints visible outside collapsed filter controls. */
+#locationNav .location-active-filters{margin:0 0 12px;padding:10px;border:1px solid var(--line);border-radius:6px;background:var(--panel,#fffdf7)}
+#locationNav .location-active-filters p{margin:0 0 8px;font-size:12px;line-height:1.5;overflow-wrap:anywhere;color:var(--ink)}
+#locationNav .location-active-filters button{font-size:12px;padding:6px 9px;white-space:normal}

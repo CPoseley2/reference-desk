@@ -1,0 +1,26 @@
+/* Keep every frame, placeholder and crop inside a reserved 16:9 viewport. */
+.canvas-home{position:relative;width:100%;aspect-ratio:16/9;min-width:0;overflow-anchor:none}
+.canvas-stage{position:absolute;inset:0;background:#05090c;isolation:isolate}
+.canvas-stage>#screen{position:absolute;inset:0;width:100%;height:100%;min-height:0;aspect-ratio:auto;overflow:hidden;contain:size layout}
+.canvas-stage>#screen>img,.canvas-stage>#screen>video{display:block;width:100%;height:100%;max-height:none;object-fit:contain}
+.canvas-stage>#screen>[role=img]{max-height:100%;align-self:center}
+.canvas-stage>#screen>p,.canvas-stage>#screen>div:not([role=img]){max-height:100%;overflow:auto}
+.canvas-view-tools{position:absolute;top:8px;right:8px;display:flex;gap:6px;z-index:2}
+.canvas-stage .review-icon{background:#10212ae8;border-color:#718791}
+.canvas-stage [hidden]{display:none!important}
+.canvas-drag{position:absolute;left:8px;top:8px;cursor:move;touch-action:none;z-index:2}
+.canvas-transport{position:absolute;bottom:8px;left:8px;right:8px;display:flex;align-items:center;gap:8px;padding:6px;background:#0c171ee8;border-radius:8px;z-index:2}
+.canvas-counter{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.canvas-view-status:empty{display:none}
+.canvas-view-status{position:absolute;left:10px;right:10px;bottom:50px;padding:8px;background:#172730;z-index:2;font-size:13px}
+.canvas-stage[data-mode=floating]{position:fixed;inset:auto;z-index:90;width:480px;height:310px;min-width:min(280px,calc(100vw - 16px));min-height:190px;max-width:calc(100vw - 16px);max-height:calc(100dvh - 16px);resize:both;overflow:hidden;border:1px solid #718791;border-radius:10px;box-shadow:0 16px 60px #0009}
+.canvas-stage[data-mode=floating]>#screen{top:46px;bottom:52px;height:calc(100% - 98px)}
+.canvas-stage[data-mode=fullscreen]{position:fixed;inset:0!important;width:100%!important;height:100dvh!important;max-width:none;max-height:none;z-index:1000;border:0;border-radius:0;resize:none}
+.canvas-stage[data-mode=fullscreen]>#screen{top:44px;bottom:54px;height:calc(100% - 98px)}
+.canvas-stage:fullscreen{background:#05090c}
+/* Variable-length shot descriptions must not resize the sticky canvas or the page. */
+.shot-heading #shot-title{--description-max-font:23;height:104px;line-height:1.35;overflow:hidden;overflow-wrap:anywhere;margin:23px 0;overflow-anchor:none}
+@media(min-width:1000px){.landscape-view .shot-heading #shot-title{--description-max-font:19;height:86px;margin:19px 0}}
+.playback-tools>#counter{font-family:ui-monospace,monospace;font-variant-numeric:tabular-nums;flex-shrink:0}
+.playback-tools>#flag-shot{min-width:114px}
+.storyboard-main-layout{overflow-anchor:none}

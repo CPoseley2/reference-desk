@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: https: http:; connect-src 'self'; object-src 'none'; base-uri 'self'">
+<title>Theater Outreach · Reference Desk</title><link rel="stylesheet" href="outreach.css"></head>
+<body>
+<header class="app-header"><a class="brand" href="/" data-leave><span class="brand-mark" aria-hidden="true">▤</span>Reference Desk</a><nav aria-label="Library sections"><a href="./" data-leave>References</a><a href="outreach.html" aria-current="page">Outreach</a><a href="crescendo.html" data-leave>Crescendo</a><a href="storyboard.html" data-leave>Storyboards</a></nav><a class="all-libraries" href="/" data-leave>All libraries ↗</a></header>
+<main>
+  <section class="page-heading"><div><p id="libraryName" class="eyebrow">YOUR LIBRARY</p><h1>Theater outreach<span class="title-dot">.</span></h1><p class="subtitle">The people, conversations, and next steps behind your next production.</p></div><div class="heading-actions"><a id="export" class="button" href="api/outreach/export.csv">↓ Export CSV</a><button id="addContact" disabled>＋ Add contact</button><button id="add" class="primary" disabled>＋ Add theater</button></div></section>
+  <section id="metrics" class="metrics" aria-label="Outreach overview"></section>
+  <section class="workspace" aria-label="Theater directory">
+    <div class="view-bar"><div class="views" role="group" aria-label="Saved views"><button data-view="all" aria-pressed="true">Directory</button><button data-view="followup" aria-pressed="false">Follow-ups due</button><button data-view="waiting" aria-pressed="false">Awaiting reply</button><button data-view="research" aria-pressed="false">Needs verification</button></div><span id="saveState" role="status">Connecting…</span></div>
+    <div class="filters"><label class="search-label"><span class="sr-only">Search theaters and contacts</span><input id="search" type="search" placeholder="Search theaters, people, notes…" autocomplete="off"></label><label><span class="sr-only">Outreach stage</span><select id="stageFilter"><option value="">All stages</option></select></label><label><span class="sr-only">County</span><select id="countyFilter"><option value="">All counties</option></select></label><label><span class="sr-only">Organization type</span><select id="typeFilter"><option value="">All types</option></select></label><button id="clear" class="quiet">Reset</button></div>
+    <div class="table-meta"><p id="resultCount" role="status" aria-live="polite">Loading your theater list…</p><span>Edit notes, next steps & dates here · saves automatically.</span></div>
+    <p id="error" role="alert" hidden></p>
+    <div class="table-wrap" tabindex="0" aria-label="Scrollable theater directory"><table><caption class="sr-only">Theater contacts and outreach tracking</caption><thead><tr>
+      <th scope="col" aria-sort="ascending"><button data-sort="name">Theater <span aria-hidden="true">↑</span></button></th><th scope="col"><button data-sort="contact">Contact <span aria-hidden="true">↕</span></button></th><th scope="col"><button data-sort="stage">Outreach stage <span aria-hidden="true">↕</span></button></th><th scope="col" class="notes-heading">Outreach notes</th><th scope="col"><button data-sort="priority">Priority <span aria-hidden="true">↕</span></button></th><th scope="col"><button data-sort="next_action">Next step <span aria-hidden="true">↕</span></button></th><th scope="col"><button data-sort="follow_up">Follow-up <span aria-hidden="true">↕</span></button></th><th scope="col"><button data-sort="last_contact">Last contact <span aria-hidden="true">↕</span></button></th>
+    </tr></thead><tbody id="rows"></tbody></table></div><div id="empty" class="empty" hidden><h2>No theaters in this view</h2><p>Try clearing the filters, or add a new theater.</p><button id="emptyReset">Reset filters</button></div>
+    <footer class="table-footer"><span id="scopeNote">Research dates and source links are preserved with each theater.</span><button id="refresh" class="quiet">↻ Refresh saved data</button></footer>
+  </section>
+  <details id="nonOperating" class="non-operating"><summary><span><strong>Non-operating theaters</strong><small>Closed organizations · records and outreach history preserved</small></span><span id="nonOperatingCount" class="archive-count">0</span></summary><div id="nonOperatingRows" class="archive-list"></div></details>
+  <p class="page-note">Saved in this Reference Desk library on your Mac. Email links open your mail app; outreach stages and activity are tracked here.</p>
+</main>
+<dialog id="recordDialog" aria-labelledby="recordTitle"><div id="detail"></div></dialog>
+<dialog id="contactPicker" aria-labelledby="contactPickerTitle"><form id="contactPickerForm"><h2 id="contactPickerTitle">Add contact</h2><p>Choose the theater this person belongs to.</p><label>Theater<select id="contactTheater" required></select></label><div class="picker-actions"><button type="button" id="cancelContactPicker">Cancel</button><button type="submit" class="primary">Continue</button></div></form></dialog>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+<script src="library-context.js"></script><script src="outreach.js"></script>
+</body></html>

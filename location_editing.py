@@ -63,11 +63,11 @@ def validate(manager, value):
         import re
         if not isinstance(context, dict):
             raise JobError('Invalid storyboard revision context.')
-        limits = {'storyboard_id': 16, 'shot_id': 8, 'song': 180, 'title': 1000, 'prompt': 18000,
+        limits = {'storyboard_id': 16, 'shot_id': 80, 'song': 180, 'title': 1000, 'prompt': 18000,
                   'asset_id': 80, 'sha256': 64, 'location_id': 180, 'slot_id': 100}
         if any(not isinstance(context.get(k), str) or len(context[k]) > n for k, n in limits.items()):
             raise JobError('Invalid storyboard revision context.')
-        if not re.fullmatch(r'[a-f0-9]{16}', context['storyboard_id']) or not re.fullmatch(r'S[0-9]{3,5}', context['shot_id']) or not re.fullmatch(r'[a-f0-9]{64}', context['sha256']):
+        if not re.fullmatch(r'[a-f0-9]{16}', context['storyboard_id']) or not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]{0,79}', context['shot_id']) or not re.fullmatch(r'[a-f0-9]{64}', context['sha256']):
             raise JobError('Invalid storyboard or source image identity.')
         if type(context.get('slot_number')) is not int or not 1 <= context['slot_number'] <= 10000:
             raise JobError('Invalid storyboard slot.')

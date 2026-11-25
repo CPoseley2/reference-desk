@@ -169,6 +169,7 @@ class Handler(BaseHTTPRequestHandler):
    if not 0<n<=(29*1024*1024 if self.path in ['/api/references','/api/location-references'] else MAX):return self.reply(413,{'error':'Invalid payload size'})
    v=json.loads(self.rfile.read(n))
    if not isinstance(v,dict):raise ValueError('Request must be an object')
+   if self.path=='/api/generation/check':return self.reply(200,self.generation.config(check=True))
    if self.path=='/api/generation/jobs':return self.reply(202,self.generation.submit(v))
    if self.path.startswith('/api/generation/jobs/') and self.path.endswith('/retry-save'):
     return self.reply(200,self.generation.retry_save(self.path.removeprefix('/api/generation/jobs/').removesuffix('/retry-save')))

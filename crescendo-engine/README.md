@@ -1,0 +1,1 @@
+Crescendo reuses the song-beat-map-editor built October 29, 2026. Audio analysis and editing logic are preserved; the dashboard adds Reference Desk navigation and library review persistence. Runtime songs and analysis outputs live in each library’s private .state/crescendo directory.

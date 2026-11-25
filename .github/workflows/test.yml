@@ -10,7 +10,20 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       - name: Check public distribution
         run: python3 scripts/check_distribution.py
-      - name: Run offline integration tests
-        run: python3 -B -m unittest -v test_framework test_libraries test_linked_library
+      - name: Install optional test dependencies
+        run: |
+          python3 -m pip install -r crescendo-engine/scripts/requirements.txt
+          brew install ffmpeg
+      - name: Run framework integration tests
+        run: CRESCENDO_PYTHON="$(command -v python3)" python3 -B -m unittest -v test_framework test_libraries test_linked_library test_storyboard test_outreach test_library_covers test_api_diagnostics test_revision_context test_crescendo
+      - name: Test portable Command Center
+        run: python3 -B -m unittest discover -s command-center -p 'test_*.py'
+      - name: Test audio engine
+        run: python3 -B -m unittest discover -s crescendo-engine/tests -p 'test_*.py'
+      - name: Test browser logic
+        run: node --test tests/*.test.js command-center/tests/*.test.js crescendo-engine/tests/*.test.js
