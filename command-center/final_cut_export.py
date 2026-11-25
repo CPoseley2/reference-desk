@@ -254,7 +254,7 @@ def build_package(root,s,approved,resolve,progress=lambda text:None):
     try:
         (work/'Media').mkdir();s=json.loads(json.dumps(s));copied={}
         for i,row in enumerate(s['shots']+([s['audio']] if s['audio'] else [])):
-            progress(f'Preparing media {i+1} of {len(s["shots"])+(1 if s['audio'] else 0)}')
+            progress(f'Preparing media {i+1} of {len(s["shots"])+(1 if s["audio"] else 0)}')
             kind='audio' if i==len(s['shots']) else 'image'
             key=(row['sha256'],tuple(row.get('crop_pixels',[])))
             if key in copied: row['packaged_path']=copied[key];continue
