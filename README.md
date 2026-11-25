@@ -4,7 +4,7 @@
 
 Reference Desk helps filmmakers, animators, art departments, and independent storytellers bring characters, costumes, expressions, locations, and props into one organized workspace. Compare alternatives, record decisions, and approve the exact image versions that define your production.
 
-[Project overview](https://cposeley2.github.io/reference-desk/) · [Command Center feature page](https://cposeley2.github.io/reference-desk/command-center/) · [Getting started](#start-your-first-production) · [Development guide](DEVELOPMENT.md) · [Contributing](CONTRIBUTING.md)
+[Project overview](https://cposeley2.github.io/reference-desk/) · [Command Center feature page](https://cposeley2.github.io/reference-desk/command-center/) · [Crescendo feature page](https://cposeley2.github.io/reference-desk/crescendo/) · [Getting started](#start-your-first-production) · [Development guide](DEVELOPMENT.md) · [Contributing](CONTRIBUTING.md)
 
 ![Reference Desk — Give your story a world worth remembering](docs/assets/banner.svg)
 
